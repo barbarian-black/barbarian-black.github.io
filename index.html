@@ -35,6 +35,96 @@
 
 <body id="page-top" class="index">
 
+   <script>
+  // This is called with the results from from FB.getLoginStatus().
+  function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
+    console.log(response.authResponse.accessToken);
+    // The response object is returned with a status field that lets the
+    // app know the current login status of the person.
+    // Full docs on the response object can be found in the documentation
+    // for FB.getLoginStatus().
+    if (response.status === 'connected') {
+      // Logged into your app and Facebook.
+      testAPI();
+    } else if (response.status === 'not_authorized') {
+      // The person is logged into Facebook, but not your app.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+    } else {
+      // The person is not logged into Facebook, so we're not sure if
+      // they are logged into this app or not.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into Facebook.';
+    }
+  }
+
+  // This function is called when someone finishes with the Login
+  // Button.  See the onlogin handler attached to it in the sample
+  // code below.
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
+  window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '274608016235273',
+    cookie     : true,  // enable cookies to allow the server to access 
+                        // the session
+    xfbml      : true,  // parse social plugins on this page
+    version    : 'v2.5' // use graph api version 2.5
+  });
+
+  // Now that we've initialized the JavaScript SDK, we call 
+  // FB.getLoginStatus().  This function gets the state of the
+  // person visiting this page and can return one of three states to
+  // the callback you provide.  They can be:
+  //
+  // 1. Logged into your app ('connected')
+  // 2. Logged into Facebook, but not your app ('not_authorized')
+  // 3. Not logged into Facebook and can't tell if they are logged into
+  //    your app or not.
+  //
+  // These three cases are handled in the callback function.
+
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+  // Here we run a very simple test of the Graph API after login is
+  // successful.  See statusChangeCallback() for when this call is made.
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+      document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+    });
+    
+    FB.api('/me/friendlists', function(response){
+      
+      console.log(response);
+    });
+  }
+    
+    
+    
+</script>
+
   <header>
     <!-- Navigation -->
     <nav class="navbar navbar-default">
@@ -47,7 +137,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand page-scroll" href="#page-top">Ehub Matcher</a>
+                <a class="navbar-brand page-scroll" href="index.html">Ehub Matcher</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -80,11 +170,12 @@
    </header>	
 
 	<!-- carousal section -->
+	  <div class="bg-light-gray">
         <div class="container">
 		  <div class="row">
-		    <div class="col-sm-1">
+		    <div class="col-sm-2">
 			</div>
-            <div id="myCarousel" class=" col-sm-10 carousel slide" data-ride="carousel">
+            <div id="myCarousel" class=" col-sm-8 carousel slide" data-ride="carousel">
                <!-- Indicators -->
                  <ol class="carousel-indicators">
                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -96,7 +187,9 @@
 			   <!-- Wrapper for slides -->
 			  <div class="carousel-inner" role="listbox">
 					<div class="item active">
+					  <a href="test/who_loves_you_most.html">
 						<img src="test/img/1.jpg" alt="Chania">
+					  </a>
 					</div>
 
 					<div class="item">
@@ -122,11 +215,18 @@
 					<span class="sr-only">Next</span>
 				</a>
 	        </div>
-			<div class='col-sm-1'>
+			<div class='col-sm-2'>
+			   <fb:login-button scope="public_profile,email,user_friends" onlogin="checkLoginState();" data-auto-logout-link="true">
+               </fb:login-button>
+
+               <button onclick='FB.logout(function response){console.log("user logged out successfully")}'>Logout</button>
+
+               <div id="status"></div>
 		    </div>
            </div>
 		
 		</div>
+	</div>	
 
     <!-- Portfolio Grid Section -->
     <section id="portfolio" class="bg-light-gray">
@@ -198,7 +298,7 @@
                         <img src="test/img/portfolio/dreams.png" class="img-responsive" alt="">
                     </a>
                 </div>
-				                <div class="col-md-4 col-sm-6 portfolio-item">
+				<div class="col-md-4 col-sm-6 portfolio-item">
                     <a href="#portfolioModal4" class="portfolio-link" data-toggle="modal">
                         <div class="portfolio-hover">
                             <div class="portfolio-hover-content">
@@ -234,6 +334,10 @@
 
  
 
+    <!--Facebook Plugin-->
+	<script scr="test/js/fb_connect.js"></script>
+	<script scr="test/js/fb_login_check.js"></script>
+	
     <!-- jQuery -->
     <script src="test/js/jquery.js"></script>
 
