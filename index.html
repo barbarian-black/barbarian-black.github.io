@@ -33,9 +33,27 @@
 
 </head>
 
+<script>
+	  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '274608016235273',
+      xfbml      : true,
+      version    : 'v2.6'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
 <body id="page-top" class="index">
      <!--Facebook Plugin-->
-	<script scr="test/js/fb_connect.js"></script>
+	
 	<script scr="test/js/fb_login_check.js"></script>
   <header>
     <!-- Navigation -->
